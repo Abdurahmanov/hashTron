@@ -10,7 +10,6 @@
 <script>
   import headerBlock from './components/Header.vue';
   export default {
-    name: 'hashtron',
     components: {
       headerBlock,
     },
@@ -27,7 +26,7 @@
   * {
     box-sizing: border-box
   }
-  
+
 
 html {
   height: 100%
@@ -42,7 +41,7 @@ body {
 h1 {
  margin: 0
 }
- 
+
 
 header,
 nav,

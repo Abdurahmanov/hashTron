@@ -1,22 +1,24 @@
 <template>
   <div class="main">
-    <Sidebar></Sidebar>
-    kek
+    <Sidebar />
+    <NewsList />
   </div>
 </template>
 
 <script>
   import Sidebar from './Sidebar';
+  import NewsList from './NewsList';
   export default {
-    name: 'landing-page',
     components: {
       Sidebar,
+      NewsList,
     },
   };
 </script>
 
-<style>
+<style lang="scss">
   .main {
-      height: calc(100vh - 120px);
+    height: calc(100vh - 120px);
+    display: flex;
   }
 </style>
