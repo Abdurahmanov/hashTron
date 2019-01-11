@@ -1,17 +1,20 @@
 <template>
-  <div class="main">
-    <Sidebar />
-    <NewsList />
-  </div>
+    <div class="main">
+        <Sidebar />
+        <NewsList />
+        <NewsDetail></NewsDetail>
+    </div>
 </template>
 
 <script>
   import Sidebar from './Sidebar';
   import NewsList from './NewsList';
+  import NewsDetail from './NewsDetail';
   export default {
     components: {
       Sidebar,
       NewsList,
+      NewsDetail,
     },
   };
 </script>

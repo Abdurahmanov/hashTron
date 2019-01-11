@@ -24,7 +24,7 @@
   .sidebar {
       width: 200px;
       height: 100%;
-      padding: 20px 35px;
+      padding: 20px;
       border-right: 1px solid #ccc;
 
       &__favorites {

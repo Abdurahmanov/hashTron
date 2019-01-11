@@ -2,17 +2,17 @@
   <header class="header">
     <div class="logo">#TRON</div>
     <div class="header__search">
-      <input type="text" placeholder="Поиск по #hashtag">
+      <input type="text" placeholder="#js">
     </div>
     <button class="header__button"></button>
   </header>
 </template>
 
 <script>
-  
+
   export default {
 
-  
+
   };
 </script>
 
@@ -21,7 +21,7 @@
     height: 120px;
     display: flex;
     align-items: center;
-    padding: 35px;
+    padding: 35px 20px;
     justify-content: space-between;
     border-bottom: 1px solid #ccc;
   }
