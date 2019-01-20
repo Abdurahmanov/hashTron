@@ -2,7 +2,7 @@
   <header class="header">
     <div class="logo">#TRON</div>
     <div class="header__search">
-      <input type="text" placeholder="#js">
+      <input type="text" placeholder="#js" v-model="searchStr" @blur="search()" @keyup.enter="search()">
     </div>
     <button class="header__button"></button>
   </header>
@@ -11,7 +11,21 @@
 <script>
 
   export default {
-
+    data() {
+      return {
+        searchStr: '',
+      };
+    },
+    methods: {
+      search() {
+        const self = this;
+        if (self.searchStr !== '') {
+          this.$store.dispatch('getSearch', {
+            slug: self.searchStr,
+          });
+        }
+      },
+    },
 
   };
 </script>
