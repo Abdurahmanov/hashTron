@@ -1,101 +1,38 @@
 <template>
-    <div>
-        <div class="news-item__block" :class="activeItem === index ? 'news-item__block_active': ''" v-for="(item, index) in news" :key="item.id">
-            <div class="news-item__name">
-                {{item.name}}
+    <div class="news-item__block" @click="isActiveItem(news)" :class="this.$store.state.newsItem.activeItemId === news.id ? 'news-item__block_active': ''"> 
+            <!-- <div class="news-item__name">
+                {{news.id}}
+            </div> -->
+            <div class="news-item__info">
+                {{news.id}} {{news.date}}
+            </div>
+            <div class="news-item__photo" v-if="news.preview">
+              <img :src="news.preview" alt="">
             </div>
             <div class="news-item__text">
-                {{item.text}}
-            </div>
-            <div class="news-item__info">
-                {{item.user}} {{item.date}}
+                {{news.text}}
             </div>
         </div>
-    </div>
 </template>
 
 <script>
   export default {
+    props: {
+      news: Object,
+    },
+    mounted() {
+    },
     data() {
       return {
-        news: [
-          {
-            id: 1,
-            name: 'Аждар Жеңісұлы',
-            text: 'Кое че задумал, будет прикольно. #css #js',
-            user: '@by_Flapjack',
-            date: '8 янв',
-          },
-          {
-            id: 2,
-            name: 'Виктор Коровин',
-            text: 'Осталось написать интерпретатор #JS на #Python, и можно будет веселится https://brython.info/console.html ',
-            user: '@Ktulhy',
-            date: '4 янв',
-          },
-          {
-            id: 3,
-            name: 'Eλευθερίαn',
-            text: 'Статическая типизация курильщика в #JS ',
-            user: '@abausk',
-            date: '2 янв',
-          },
-          {
-            id: 4,
-            name: 'Камиль Абзалов',
-            text: '#js #javascript\n' +
-            'И снова о наболевшем - this в javascript.\n' +
-            'Ссылка на статью категории "очень хорошо" - https://getinstance.info/articles/javas ',
-            user: '@kamabzalov',
-            date: '6 янв',
-          },
-          {
-            id: 5,
-            name: 'Елена Орехова',
-            text: 'Узнал http://webdiz.com.ua/osnovy-javascript/peremennye-v-javascript … как создать переменную в #JS.',
-            user: '@Elena_Orexova',
-            date: '8 янв',
-          },
-          {
-            id: 6,
-            name: 'Аждар Жеңісұлы',
-            text: 'Кое че задумал, будет прикольно. #css #js',
-            user: '@by_Flapjack',
-            date: '8 янв',
-          },
-          {
-            id: 7,
-            name: 'Виктор Коровин',
-            text: 'Осталось написать интерпретатор #JS на #Python, и можно будет веселится https://brython.info/console.html ',
-            user: '@Ktulhy',
-            date: '4 янв',
-          },
-          {
-            id: 8,
-            name: 'Eλευθερίαn',
-            text: 'Статическая типизация курильщика в #JS ',
-            user: '@abausk',
-            date: '2 янв',
-          },
-          {
-            id: 9,
-            name: 'Камиль Абзалов',
-            text: '#js #javascript\n' +
-            'И снова о наболевшем - this в javascript.\n' +
-            'Ссылка на статью категории "очень хорошо" - https://getinstance.info/articles/javas ',
-            user: '@kamabzalov',
-            date: '6 янв',
-          },
-          {
-            id: 10,
-            name: 'Елена Орехова',
-            text: 'Узнал http://webdiz.com.ua/osnovy-javascript/peremennye-v-javascript … как создать переменную в #JS.',
-            user: '@Elena_Orexova',
-            date: '8 янв',
-          },
-        ],
-        activeItem: 1,
+  
       };
+    },
+    methods: {
+      isActiveItem(item) {
+        this.$store.dispatch('getItem', {
+          item,
+        });
+      },
     },
   };
 </script>
@@ -103,11 +40,24 @@
 <style lang="scss">
     .news-item {
         &__block {
-            border-bottom: 1px solid #ccc;
-            padding: 20px;
-            cursor: pointer;
+          border-bottom: 1px solid #ccc;
+          padding: 20px;
+          cursor: pointer;
+          overflow: hidden;
+          max-height: 250px;
+          position: relative;
             &_active {
                 background: #ccc;
+            }
+            &:after{
+              content: '';
+              display: block;
+              background: linear-gradient(to top, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 99%,rgba(255,255,255,0) 100%);
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              height: 50%
             }
         }
 
@@ -119,12 +69,18 @@
         &__text {
             margin-top: 10px;
             font-size: 22px;
+            overflow: hidden;
+            max-height: 180px;
+            word-wrap: break-word;
         }
 
         &__info {
             font-size: 15px;
             color: gray;
-            margin-top: 5px;
+        }
+        &__photo{
+          text-align: center;
+          margin-top: 10px
         }
     }
 </style>

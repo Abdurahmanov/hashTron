@@ -1,6 +1,6 @@
 <template>
   <div class="news-list">
-    <NewsItem/>
+    <NewsItem v-for="(item, index) in this.$store.state.vk.searchResult" :news="item" :key="item.id" />
   </div>
 </template>
 

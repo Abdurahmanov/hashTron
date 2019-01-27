@@ -1,17 +1,17 @@
 <template>
     <div class="news-detail">
         <div class="news-detail__favorites"></div>
-        <div class="news-detail__img">
-            <img src="https://via.placeholder.com/500x300" alt="">
+        <div class="news-detail__img" v-if="this.$store.state.newsItem.activeItem.photo">
+            <img :src="this.$store.state.newsItem.activeItem.photo" alt="">
         </div>
-        <div class="news-detail__title">
-            Виктор Коровин
-        </div>
+        <!-- <div class="news-detail__title">
+           {{ this.$store.state.newsItem.activeItem.id}}
+        </div> -->
         <div class="news-detail__text">
-            Осталось написать интерпретатор #JS на #Python, и можно будет веселится https://brython.info/console.html
+            {{ this.$store.state.newsItem.activeItem.text}}
         </div>
         <div class="news-detail__info">
-            @Ktulhy 4 янв
+             {{this.$store.state.newsItem.activeItem.id}} {{ this.$store.state.newsItem.activeItem.date}}
         </div>
     </div>
 </template>
@@ -32,10 +32,10 @@
         &__img {
             text-align: center;
             width: 100%;
+            margin-bottom: 40px;
         }
 
         &__title {
-            margin-top: 40px;
             text-align: center;
             font-size: 70px;
             font-weight: 500;

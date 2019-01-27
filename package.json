@@ -55,6 +55,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "axios-jsonp": "^1.0.2",
+    "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",

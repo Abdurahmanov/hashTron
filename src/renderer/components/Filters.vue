@@ -21,22 +21,18 @@
         filters: [
           {
             id: 1,
-            name: 'Twitter',
-          },
-          {
-            id: 2,
             name: 'Instagram',
           },
           {
-            id: 3,
+            id: 2,
             name: 'VK',
           },
           {
-            id: 4,
+            id: 3,
             name: 'Facebook',
           },
         ],
-        filterCheck: [1],
+        filterCheck: [2],
       };
     },
   };
