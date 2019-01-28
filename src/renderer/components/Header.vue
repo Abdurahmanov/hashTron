@@ -4,7 +4,7 @@
     <div class="header__search">
       <input type="text" placeholder="#js" v-model="searchStr" @blur="search()" @keyup.enter="search()">
     </div>
-    <button class="header__button"></button>
+    <button class="header__button">+</button>
   </header>
 </template>
 
@@ -64,7 +64,7 @@
     outline: none;
     background: none;
     border: none;
-    background: url(../assets/reset.svg);
+    background: url(../assets/plus.svg);
     width: 60px;
     height: 60px;
     background-size: cover;

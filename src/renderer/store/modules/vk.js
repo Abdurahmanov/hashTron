@@ -22,8 +22,8 @@ const actions = {
 
 const mutations = {
   setSearch(state, { result }) {
-    const formatObj = result.map(item => ({
-      id: _.get(item, 'id', '0'),
+    const formatObj = result.map((item, index) => ({
+      id: `${_.get(item, 'id', '0')}${index}`,
       text: _.get(item, 'text', ''),
       date: moment.unix(_.get(item, 'date', '0')).format('MMM Do YY'),
       ownerId: _.get(item, 'owner_id', ''),

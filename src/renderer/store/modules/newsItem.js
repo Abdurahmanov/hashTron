@@ -12,7 +12,16 @@ const actions = {
 const mutations = {
   setItem(state, { result }) {
     state.activeItemId = result.id;
-    state.activeItem = result;
+    state.activeItem = {
+      like: false,
+      ...result,
+    };
+  },
+  setActiveFavorites(state) {
+    state.activeItem = {
+      ...state.activeItem,
+      like: !state.activeItem.like,
+    };
   },
 };
 

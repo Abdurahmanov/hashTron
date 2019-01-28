@@ -1,5 +1,5 @@
 <template>
-    <div class="news-item__block" @click="isActiveItem(news)" :class="this.$store.state.newsItem.activeItemId === news.id ? 'news-item__block_active': ''"> 
+    <div class="news-item__block" @click="isActiveItem(news)" :class="this.$store.state.newsItem.activeItemId === news.id ? 'news-item__block_active': ''">
             <!-- <div class="news-item__name">
                 {{news.id}}
             </div> -->
@@ -24,7 +24,7 @@
     },
     data() {
       return {
-  
+
       };
     },
     methods: {
@@ -45,6 +45,7 @@
           cursor: pointer;
           overflow: hidden;
           max-height: 250px;
+          min-height: 150px;
           position: relative;
             &_active {
                 background: #ccc;
