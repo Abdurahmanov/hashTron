@@ -13,6 +13,9 @@
     components: {
       headerBlock,
     },
+    mounted() {
+      // this.$store.commit('wsVk');
+    },
   };
 </script>
 

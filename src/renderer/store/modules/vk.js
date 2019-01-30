@@ -2,10 +2,12 @@ import axios from 'axios';
 import jsonp from 'axios-jsonp';
 import _ from 'lodash';
 import moment from 'moment';
+import vkflow from 'vkflow';
 // import { SET_SEARCH } from '../const';
 
 const state = {
   searchResult: [],
+  VK_SERVICE_KEY: '6f23fc446f23fc446f23fc44646f4bd04c66f236f23fc4433673e02487c5a119c0d7833',
 };
 
 const actions = {
@@ -31,6 +33,18 @@ const mutations = {
       preview: _.get(item, 'attachments[0].photo.sizes[0].url', ''),
     }));
     state.searchResult = state.searchResult.concat(formatObj).reverse();
+  },
+
+  wsVk(state) {
+    const animalsFlow = vkflow(
+      state.VK_SERVICE_KEY,
+      [{ value: 'кот', tag: 'cats' },
+        { value: 'собака', tag: 'dogs' },
+        { value: 'попугай', tag: 'parrots' },
+      ],
+    );
+
+    animalsFlow.on('data', data => console.log(data));
   },
 };
 

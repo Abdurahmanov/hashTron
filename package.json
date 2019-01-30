@@ -57,6 +57,7 @@
     "axios-jsonp": "^1.0.2",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "vkflow": "^1.0.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",

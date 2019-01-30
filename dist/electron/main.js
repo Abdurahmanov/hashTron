@@ -503,7 +503,7 @@ eval("\n__webpack_require__(/*! electron-debug */ \"./node_modules/electron-debu
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n\nif (false) {}\n\nvar mainWindow = void 0;\nvar winURL =  true ? 'http://localhost:9080' : undefined;\n\nfunction createWindow() {\n  mainWindow = new electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"]({\n    fullscreen: true\n  });\n\n  mainWindow.loadURL(winURL);\n\n  mainWindow.on('closed', function () {\n    mainWindow = null;\n  });\n}\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('ready', createWindow);\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('window-all-closed', function () {\n  if (process.platform !== 'darwin') {\n    electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\n  }\n});\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('activate', function () {\n  if (mainWindow === null) {\n    createWindow();\n  }\n});\n\n//# sourceURL=webpack:///./src/main/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n\n\nvar VK_SERVICE_KEY = '6f23fc446f23fc446f23fc44646f4bd04c66f236f23fc4433673e02487c5a119c0d7833';\nvar vkflow = __webpack_require__(/*! vkflow */ \"vkflow\");\n\nvar animalsFlow = vkflow(VK_SERVICE_KEY, [{ value: 'кот', tag: 'cats' }, { value: 'собака', tag: 'dogs' }, { value: 'попугай', tag: 'parrots' }]);\n\nanimalsFlow.on('data', function (data) {\n  return console.log(data);\n});\n\nif (false) {}\n\nvar mainWindow = void 0;\nvar winURL =  true ? 'http://localhost:9080' : undefined;\n\nfunction createWindow() {\n  mainWindow = new electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"]({\n    fullscreen: true\n  });\n\n  mainWindow.loadURL(winURL);\n\n  mainWindow.on('closed', function () {\n    mainWindow = null;\n  });\n}\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('ready', createWindow);\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('window-all-closed', function () {\n  if (process.platform !== 'darwin') {\n    electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\n  }\n});\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('activate', function () {\n  if (mainWindow === null) {\n    createWindow();\n  }\n});\n\n//# sourceURL=webpack:///./src/main/index.js?");
 
 /***/ }),
 
@@ -625,6 +625,17 @@ eval("module.exports = require(\"tty\");\n\n//# sourceURL=webpack:///external_%2
 /***/ (function(module, exports) {
 
 eval("module.exports = require(\"util\");\n\n//# sourceURL=webpack:///external_%22util%22?");
+
+/***/ }),
+
+/***/ "vkflow":
+/*!*************************!*\
+  !*** external "vkflow" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"vkflow\");\n\n//# sourceURL=webpack:///external_%22vkflow%22?");
 
 /***/ })
 
