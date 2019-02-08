@@ -1,13 +1,13 @@
 <template>
     <div class="news-detail">
         <div class="news-detail__block" v-if="this.$store.state.newsItem.activeItem !== ''">
-            <div class="news-detail__favorites" @click="activeFavorites" :class="this.$store.state.newsItem.activeItem.like === true ? 'news-detail__favorites_active': ''"></div>
+            <div class="news-detail__favorites"
+             @click="activeFavorites" 
+             :class="this.$store.state.newsItem.activeItem.like === true ? 'news-detail__favorites_active': ''"
+             ></div>
             <div class="news-detail__img" v-if="this.$store.state.newsItem.activeItem.photo">
                 <img :src="this.$store.state.newsItem.activeItem.photo" alt="">
             </div>
-            <!-- <div class="news-detail__title">
-               {{ this.$store.state.newsItem.activeItem.id}}
-            </div> -->
             <div class="news-detail__text">
                 {{ this.$store.state.newsItem.activeItem.text}}
             </div>

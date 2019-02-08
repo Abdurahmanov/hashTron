@@ -55,6 +55,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "axios-jsonp": "^1.0.2",
+    "express": "^4.16.4",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "vkflow": "^1.0.0",

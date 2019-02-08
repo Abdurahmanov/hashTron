@@ -3,11 +3,10 @@ import jsonp from 'axios-jsonp';
 import _ from 'lodash';
 import moment from 'moment';
 import vkflow from 'vkflow';
-// import { SET_SEARCH } from '../const';
 
 const state = {
   searchResult: [],
-  VK_SERVICE_KEY: '6f23fc446f23fc446f23fc44646f4bd04c66f236f23fc4433673e02487c5a119c0d7833',
+  VK_SERVICE_KEY: 'd6b72f18d6b72f18d6b72f1862d6df0310dd6b7d6b72f188ae535400a0ddc1f3581ad6a',
 };
 
 const actions = {

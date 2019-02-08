@@ -1,8 +1,5 @@
 <template>
     <div class="news-item__block" @click="isActiveItem(news)" :class="this.$store.state.newsItem.activeItemId === news.id ? 'news-item__block_active': ''">
-            <!-- <div class="news-item__name">
-                {{news.id}}
-            </div> -->
             <div class="news-item__info">
                 {{news.id}} {{news.date}}
             </div>

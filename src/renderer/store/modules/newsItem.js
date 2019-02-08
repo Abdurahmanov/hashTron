@@ -5,16 +5,16 @@ const state = {
 
 const actions = {
   getItem({ commit }, { item }) {
-    commit('setItem', { result: item });
+    commit('setItem', { item });
   },
 };
 
 const mutations = {
-  setItem(state, { result }) {
-    state.activeItemId = result.id;
+  setItem(state, { item }) {
+    state.activeItemId = item.id;
     state.activeItem = {
       like: false,
-      ...result,
+      ...item,
     };
   },
   setActiveFavorites(state) {

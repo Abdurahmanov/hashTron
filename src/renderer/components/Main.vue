@@ -1,11 +1,15 @@
 <template>
     <div class="main">
         <Sidebar />
-        <div class="main__block" v-if="this.$store.state.vk.searchResult.length > 0">
+        <div class="main__block" 
+            v-if="this.$store.state.vk.searchResult.length > 0"
+        >
             <NewsList />
             <NewsDetail></NewsDetail>
         </div>
-        <div class="main__empty" v-else>Введите в поисковую строку интересующий Вас hashtag</div>
+        <div class="main__empty" v-else>
+            Введите в поисковую строку интересующий Вас hashtag
+            </div>
     </div>
 </template>
 

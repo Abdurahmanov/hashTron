@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-// import { createPersistedState, createSharedMutations } from 'vuex-electron';
-
 import vk from './modules/vk';
 import newsItem from './modules/newsItem';
 
