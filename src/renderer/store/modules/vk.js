@@ -19,6 +19,28 @@ const actions = {
       commit('setSearch', { result: response.data.response.items });
     });
   },
+  wsVk({ state }, { slug }) {
+    const animalsFlow = vkflow(
+      state.VK_SERVICE_KEY,
+      [{ value: slug, tag: slug }],
+    );
+
+    animalsFlow.on('data', data => console.log(data));
+  },
+
+  test() {
+    // const myInit = {
+    //   method: 'get',
+    // };
+
+    // fetch('http://localhost:3000/test', myInit)
+    //   .then(res => res.json())
+    //   .then((res) => {
+    //     console.log(res);// {"ключ":"значение"}
+    //   });
+
+    axios.get('http://localhost:3000/test').then(res => console.log(res.data));
+  },
 };
 
 const mutations = {
@@ -31,19 +53,7 @@ const mutations = {
       photo: _.get(item, 'attachments[0].photo.sizes[3].url', ''),
       preview: _.get(item, 'attachments[0].photo.sizes[0].url', ''),
     }));
-    state.searchResult = state.searchResult.concat(formatObj).reverse();
-  },
-
-  wsVk(state) {
-    const animalsFlow = vkflow(
-      state.VK_SERVICE_KEY,
-      [{ value: 'кот', tag: 'cats' },
-        { value: 'собака', tag: 'dogs' },
-        { value: 'попугай', tag: 'parrots' },
-      ],
-    );
-
-    animalsFlow.on('data', data => console.log(data));
+    state.searchResult = formatObj;
   },
 };
 

@@ -2,7 +2,7 @@
   <header class="header">
     <div class="logo">#TRON</div>
     <div class="header__search">
-      <input type="text" placeholder="#js" v-model="searchStr" @blur="search()" @keyup.enter="search()">
+      <input type="text" placeholder="#js" v-model="searchStr" @keyup.enter="search()">
     </div>
     <button class="header__button">+</button>
   </header>

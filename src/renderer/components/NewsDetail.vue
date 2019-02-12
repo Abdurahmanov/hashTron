@@ -3,8 +3,7 @@
         <div class="news-detail__block" v-if="this.$store.state.newsItem.activeItem !== ''">
             <div class="news-detail__favorites"
              @click="activeFavorites" 
-             :class="this.$store.state.newsItem.activeItem.like === true ? 'news-detail__favorites_active': ''"
-             ></div>
+             :class="this.$store.state.newsItem.activeItem.like === true ? 'news-detail__favorites_active': ''"/>
             <div class="news-detail__img" v-if="this.$store.state.newsItem.activeItem.photo">
                 <img :src="this.$store.state.newsItem.activeItem.photo" alt="">
             </div>
@@ -22,13 +21,16 @@
 </template>
 
 <script>
-  export default {
-    methods: {
-      activeFavorites() {
-        this.$store.commit('setActiveFavorites');
-      },
+export default {
+  methods: {
+    activeFavorites() {
+      this.$store.commit('setActiveFavorites');
     },
-  };
+  },
+  mounted() {
+    console.log('kek');
+  },
+};
 </script>
 
 <style lang="scss">
@@ -39,6 +41,10 @@
         overflow-y: auto;
         overflow-x: hidden;
         display: flex;
+
+        &__block {
+            width: 100%;
+        }
 
         &__empty {
             text-align: center;
