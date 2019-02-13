@@ -25,26 +25,25 @@ const animalsFlow = vkflow(
     { value: 'xiaomi', tag: 'xiaomi' },
     { value: 'samsung', tag: 'samsung' },
     { value: 'apple', tag: 'apple' },
+    { value: 'любовь', tag: 'love' },
+    { value: 'путешествия', tag: 'путешествия' },
   ],
 );
 
 let newData = '';
 
 animalsFlow.on('data', (data) => {
-  newData = data;
+  newData = JSON.parse(data);
 });
 
 // io.on('connection', (socket) => {
 //   socket.emit('news', newData);
-//   socket.on('my other event', (data) => {
-//     console.log(data);
-//   });
 // });
 
 io.on('connection', (socket) => {
   const news = setInterval(() => {
     socket.emit('news', newData);
-  }, 100);
+  }, 5000);
 
   socket.on('disconnect', () => {
     clearInterval(news);

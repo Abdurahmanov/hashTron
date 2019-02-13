@@ -2,12 +2,11 @@ import axios from 'axios';
 import jsonp from 'axios-jsonp';
 import _ from 'lodash';
 import moment from 'moment';
-import vkflow from 'vkflow';
 import io from 'socket.io-client';
 
 const state = {
   searchResult: [],
-  VK_SERVICE_KEY: 'd6b72f18d6b72f18d6b72f1862d6df0310dd6b7d6b72f188ae535400a0ddc1f3581ad6a',
+  lastResult: {},
 };
 
 const actions = {
@@ -20,36 +19,19 @@ const actions = {
       commit('setSearch', { result: response.data.response.items });
     });
   },
-  wsVk({ state }, { slug }) {
-    const animalsFlow = vkflow(
-      state.VK_SERVICE_KEY,
-      [{ value: slug, tag: slug }],
-    );
-
-    animalsFlow.on('data', data => console.log(data.event));
-  },
 
   test({ commit }) {
     const socket = io.connect('http://localhost:3000');
     socket.on('news', (data) => {
       if (data !== '') {
-        const jsonData = JSON.parse(data);
-        commit('setSearch', { result: jsonData.event });
+        commit('setSearch', { result: data.event });
       }
     });
-    // axios.get('http://localhost:3000').then((res) => {
-    //   console.log(res, 'res');
-    //   if (res.data !== '') {
-    //     const data = JSON.parse(res.data);
-    //     commit('setSearch', { result: data.event });
-    //   }
-    // });
   },
 };
 
 const mutations = {
   setSearch(state, { result }) {
-    console.log(result, 'result');
     const formatObj = {
       id: _.get(result, 'signer_id') || _.get(result, 'event_id.post_owner_id', '0'),
       text: _.get(result, 'text', ''),
@@ -60,9 +42,15 @@ const mutations = {
       author: _.get(result, 'author.author_url', ''),
       tags: _.get(result, 'tags'),
     };
-
-    console.log(formatObj, 'formatObj');
-    state.searchResult = state.searchResult.concat(formatObj).reverse();
+    const newsLength = state.searchResult.length;
+    if (newsLength === 0) {
+      state.searchResult = state.searchResult.concat(formatObj);
+    } else if (state.lastResult.id !== formatObj.id) {
+      const newResult = state.searchResult;
+      newResult.unshift(formatObj);
+      state.searchResult = newResult;
+    }
+    state.lastResult = formatObj;
   },
 };
 
