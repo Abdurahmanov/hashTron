@@ -503,7 +503,7 @@ eval("\n__webpack_require__(/*! electron-debug */ \"./node_modules/electron-debu
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var vkflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vkflow */ \"vkflow\");\n/* harmony import */ var vkflow__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vkflow__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! express */ \"express\");\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_2__);\n\n\n\nvar kek = express__WEBPACK_IMPORTED_MODULE_2___default()();\n\nkek.use(function (req, res, next) {\n  res.header('Access-Control-Allow-Origin', '*');\n  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');\n  next();\n});\n\nkek.listen(3000, function () {\n  console.log('Example app listening on port 3000!');\n});\n\nvar VK_SERVICE_KEY = 'd6b72f18d6b72f18d6b72f1862d6df0310dd6b7d6b72f188ae535400a0ddc1f3581ad6a';\n\nvar animalsFlow = vkflow__WEBPACK_IMPORTED_MODULE_1___default()(VK_SERVICE_KEY, [{ value: 'кот', tag: 'cats' }, { value: 'собака', tag: 'dogs' }, { value: 'попугай', tag: 'parrots' }, { value: 'xiaomi', tag: 'xiaomi' }, { value: 'samsung', tag: 'samsung' }, { value: 'apple', tag: 'apple' }]);\n\nvar newData = '';\n\nanimalsFlow.on('data', function (data) {\n  newData = data;\n});\n\nkek.get('/test', function (req, res) {\n  res.json(newData);\n});\n\nif (false) {}\n\nvar mainWindow = void 0;\nvar winURL =  true ? 'http://localhost:9080' : undefined;\n\nfunction createWindow() {\n  mainWindow = new electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"]({\n    fullscreen: true\n  });\n\n  mainWindow.loadURL(winURL);\n\n  mainWindow.on('closed', function () {\n    mainWindow = null;\n  });\n}\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('ready', createWindow);\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('window-all-closed', function () {\n  if (process.platform !== 'darwin') {\n    electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\n  }\n});\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('activate', function () {\n  if (mainWindow === null) {\n    createWindow();\n  }\n});\n\n//# sourceURL=webpack:///./src/main/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var vkflow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vkflow */ \"vkflow\");\n/* harmony import */ var vkflow__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vkflow__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! express */ \"express\");\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_2__);\n\n\n\nvar kek = express__WEBPACK_IMPORTED_MODULE_2___default()();\nvar server = __webpack_require__(/*! http */ \"http\").createServer(kek);\nvar io = __webpack_require__(/*! socket.io */ \"socket.io\")(server);\n\nkek.use(function (req, res, next) {\n  res.header('Access-Control-Allow-Origin', '*');\n  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');\n  next();\n});\n\nserver.listen(3000);\n\nvar VK_SERVICE_KEY = 'd6b72f18d6b72f18d6b72f1862d6df0310dd6b7d6b72f188ae535400a0ddc1f3581ad6a';\n\nvar animalsFlow = vkflow__WEBPACK_IMPORTED_MODULE_1___default()(VK_SERVICE_KEY, [{ value: 'кот', tag: 'cats' }, { value: 'собака', tag: 'dogs' }, { value: 'попугай', tag: 'parrots' }, { value: 'xiaomi', tag: 'xiaomi' }, { value: 'samsung', tag: 'samsung' }, { value: 'apple', tag: 'apple' }]);\n\nvar newData = '';\n\nanimalsFlow.on('data', function (data) {\n  newData = data;\n});\n\nio.on('connection', function (socket) {\n  var news = setInterval(function () {\n    socket.emit('news', newData);\n  }, 100);\n\n  socket.on('disconnect', function () {\n    clearInterval(news);\n  });\n});\n\nkek.get('/', function (req, res) {\n  res.json(newData);\n});\n\nif (false) {}\n\nvar mainWindow = void 0;\nvar winURL =  true ? 'http://localhost:9080' : undefined;\n\nfunction createWindow() {\n  mainWindow = new electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"]({\n    fullscreen: true\n  });\n\n  mainWindow.loadURL(winURL);\n\n  mainWindow.on('closed', function () {\n    mainWindow = null;\n  });\n}\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('ready', createWindow);\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('window-all-closed', function () {\n  if (process.platform !== 'darwin') {\n    electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\n  }\n});\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on('activate', function () {\n  if (mainWindow === null) {\n    createWindow();\n  }\n});\n\n//# sourceURL=webpack:///./src/main/index.js?");
 
 /***/ }),
 
@@ -584,6 +584,17 @@ eval("module.exports = require(\"fs\");\n\n//# sourceURL=webpack:///external_%22
 
 /***/ }),
 
+/***/ "http":
+/*!***********************!*\
+  !*** external "http" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"http\");\n\n//# sourceURL=webpack:///external_%22http%22?");
+
+/***/ }),
+
 /***/ "https":
 /*!************************!*\
   !*** external "https" ***!
@@ -614,6 +625,17 @@ eval("module.exports = require(\"net\");\n\n//# sourceURL=webpack:///external_%2
 /***/ (function(module, exports) {
 
 eval("module.exports = require(\"path\");\n\n//# sourceURL=webpack:///external_%22path%22?");
+
+/***/ }),
+
+/***/ "socket.io":
+/*!****************************!*\
+  !*** external "socket.io" ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"socket.io\");\n\n//# sourceURL=webpack:///external_%22socket.io%22?");
 
 /***/ }),
 

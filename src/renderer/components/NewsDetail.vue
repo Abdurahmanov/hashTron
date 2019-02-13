@@ -7,8 +7,7 @@
             <div class="news-detail__img" v-if="this.$store.state.newsItem.activeItem.photo">
                 <img :src="this.$store.state.newsItem.activeItem.photo" alt="">
             </div>
-            <div class="news-detail__text">
-                {{ this.$store.state.newsItem.activeItem.text}}
+            <div class="news-detail__text" v-html="this.$store.state.newsItem.activeItem.text">
             </div>
             <div class="news-detail__info">
                 {{this.$store.state.newsItem.activeItem.id}} {{ this.$store.state.newsItem.activeItem.date}}

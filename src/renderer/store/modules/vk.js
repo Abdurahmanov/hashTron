@@ -3,6 +3,7 @@ import jsonp from 'axios-jsonp';
 import _ from 'lodash';
 import moment from 'moment';
 import vkflow from 'vkflow';
+import io from 'socket.io-client';
 
 const state = {
   searchResult: [],
@@ -25,35 +26,43 @@ const actions = {
       [{ value: slug, tag: slug }],
     );
 
-    animalsFlow.on('data', data => console.log(data));
+    animalsFlow.on('data', data => console.log(data.event));
   },
 
-  test() {
-    // const myInit = {
-    //   method: 'get',
-    // };
-
-    // fetch('http://localhost:3000/test', myInit)
-    //   .then(res => res.json())
-    //   .then((res) => {
-    //     console.log(res);// {"ключ":"значение"}
-    //   });
-
-    axios.get('http://localhost:3000/test').then(res => console.log(res.data));
+  test({ commit }) {
+    const socket = io.connect('http://localhost:3000');
+    socket.on('news', (data) => {
+      if (data !== '') {
+        const jsonData = JSON.parse(data);
+        commit('setSearch', { result: jsonData.event });
+      }
+    });
+    // axios.get('http://localhost:3000').then((res) => {
+    //   console.log(res, 'res');
+    //   if (res.data !== '') {
+    //     const data = JSON.parse(res.data);
+    //     commit('setSearch', { result: data.event });
+    //   }
+    // });
   },
 };
 
 const mutations = {
   setSearch(state, { result }) {
-    const formatObj = result.map((item, index) => ({
-      id: `${_.get(item, 'id', '0')}${index}`,
-      text: _.get(item, 'text', ''),
-      date: moment.unix(_.get(item, 'date', '0')).format('MMM Do YY'),
-      ownerId: _.get(item, 'owner_id', ''),
-      photo: _.get(item, 'attachments[0].photo.sizes[3].url', ''),
-      preview: _.get(item, 'attachments[0].photo.sizes[0].url', ''),
-    }));
-    state.searchResult = formatObj;
+    console.log(result, 'result');
+    const formatObj = {
+      id: _.get(result, 'signer_id') || _.get(result, 'event_id.post_owner_id', '0'),
+      text: _.get(result, 'text', ''),
+      date: moment.unix(_.get(result, 'creation_time', '0')).format('MMM Do YY'),
+      ownerId: _.get(result, 'signer_id') || _.get(result, 'event_id.post_owner_id', '0'),
+      photo: _.get(result, 'attachments[0].photo.photo_604', ''),
+      preview: _.get(result, 'attachments[0].photo.photo_130', ''),
+      author: _.get(result, 'author.author_url', ''),
+      tags: _.get(result, 'tags'),
+    };
+
+    console.log(formatObj, 'formatObj');
+    state.searchResult = state.searchResult.concat(formatObj).reverse();
   },
 };
 

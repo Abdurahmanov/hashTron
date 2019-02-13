@@ -6,8 +6,7 @@
             <div class="news-item__photo" v-if="news.preview">
               <img :src="news.preview" alt="">
             </div>
-            <div class="news-item__text">
-                {{news.text}}
+            <div class="news-item__text" v-html="news.text">
             </div>
         </div>
 </template>
