@@ -20,7 +20,7 @@
       search() {
         const self = this;
         if (self.searchStr !== '') {
-          this.$store.dispatch('test', {
+          this.$store.dispatch('getSearch', {
             slug: self.searchStr,
           });
         }

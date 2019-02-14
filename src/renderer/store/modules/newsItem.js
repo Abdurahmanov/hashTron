@@ -11,7 +11,7 @@ const actions = {
 
 const mutations = {
   setItem(state, { item }) {
-    state.activeItemId = item.id;
+    state.activeItemId = item.ownerId;
     state.activeItem = {
       like: false,
       ...item,

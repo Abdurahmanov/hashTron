@@ -1,58 +1,87 @@
 import { app, BrowserWindow } from 'electron' // eslint-disable-line
 import vkflow from 'vkflow';
 import express from 'express';
-const kek = express();
-const server = require('http').createServer(kek);
+import bodyParse from 'body-parser';
+const expressServer = express();
+const server = require('http').createServer(expressServer);
 const io = require('socket.io')(server);
+// const { VKWebSocket } = vkflow;
+// const { authWithToken, flushRules, postRule } = vkflow.VKStreamingAPI;
 
-kek.use((req, res, next) => {
+expressServer.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 
+expressServer.use(bodyParse.urlencoded({ extended: false }));
+expressServer.use(bodyParse.json());
 
 server.listen(3000);
 
+let flowTag = '';
 
 const VK_SERVICE_KEY = 'd6b72f18d6b72f18d6b72f1862d6df0310dd6b7d6b72f188ae535400a0ddc1f3581ad6a';
 
-const animalsFlow = vkflow(
-  VK_SERVICE_KEY,
-  [{ value: 'кот', tag: 'cats' },
-    { value: 'собака', tag: 'dogs' },
-    { value: 'попугай', tag: 'parrots' },
-    { value: 'xiaomi', tag: 'xiaomi' },
-    { value: 'samsung', tag: 'samsung' },
-    { value: 'apple', tag: 'apple' },
-    { value: 'любовь', tag: 'love' },
-    { value: 'путешествия', tag: 'путешествия' },
-  ],
-);
+// const vkWS = async (tag) => {
+//   const { endpoint, key } = await authWithToken(VK_SERVICE_KEY);
 
-let newData = '';
+//   await flushRules(endpoint, key);
 
-animalsFlow.on('data', (data) => {
-  newData = JSON.parse(data);
-});
+//   await postRule(endpoint, key, { tag });
 
-// io.on('connection', (socket) => {
-//   socket.emit('news', newData);
-// });
 
-io.on('connection', (socket) => {
-  const news = setInterval(() => {
-    socket.emit('news', newData);
-  }, 5000);
+//   const socketWs = new VKWebSocket(
+//     `wss://${endpoint}/stream?key=${key}`,
+//     { socket: { omitServiceMessages: false } },
+//   );
 
-  socket.on('disconnect', () => {
-    clearInterval(news);
+//   let newData = '';
+
+//   socketWs.on('data', (data) => {
+//     console.log(data);
+//     newData = JSON.parse(data);
+//   });
+
+//   io.on('connection', (socket) => {
+//     const news = setInterval(() => {
+//       socket.emit('news', newData);
+//     }, 5000);
+
+//     socket.on('disconnect', () => {
+//       clearInterval(news);
+//     });
+//   });
+// };
+
+const vkWs = (tag) => {
+  const newsFlow = vkflow(
+    VK_SERVICE_KEY,
+    [{ value: 'js', tag: 'js' },
+      { value: 'css', tag: 'css' }, tag],
+  );
+
+  let newData = '';
+
+  newsFlow.on('data', (data) => {
+    newData = JSON.parse(data);
   });
-});
 
+  io.on('connection', (socket) => {
+    const news = setInterval(() => {
+      socket.emit('news', newData);
+    }, 5000);
 
-kek.get('/', (req, res) => {
-  res.json(newData);
+    socket.on('disconnect', () => {
+      clearInterval(news);
+    });
+  });
+};
+
+expressServer.post('/news', (req, res) => {
+  flowTag = { value: req.body.tag, tag: req.body.tag };
+  vkWs(flowTag);
+  res.send('ok');
 });
 
 

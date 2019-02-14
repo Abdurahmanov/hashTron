@@ -1,7 +1,9 @@
 <template>
-    <div class="news-item__block" @click="isActiveItem(news)" :class="this.$store.state.newsItem.activeItemId === news.id ? 'news-item__block_active': ''">
+    <div class="news-item__block" @click="isActiveItem(news)" :class="this.$store.state.newsItem.activeItemId === news.ownerId ? 'news-item__block_active': ''">
             <div class="news-item__info">
-                {{news.id}} {{news.date}}
+              <span v-if="news.author !== ''">{{news.author}}</span>
+              <span v-else>{{news.ownerId}}</span>
+                 {{news.date}}
             </div>
             <div class="news-item__photo" v-if="news.preview">
               <img :src="news.preview" alt="">
@@ -75,9 +77,14 @@
             font-size: 15px;
             color: gray;
         }
-        &__photo{
+        &__photo {
           text-align: center;
-          margin-top: 10px
+          margin-top: 10px;
+
+          img {
+              max-width: 100%;
+              height: 120px;
+          }
         }
     }
 </style>

@@ -10,7 +10,12 @@
             <div class="news-detail__text" v-html="this.$store.state.newsItem.activeItem.text">
             </div>
             <div class="news-detail__info">
-                {{this.$store.state.newsItem.activeItem.id}} {{ this.$store.state.newsItem.activeItem.date}}
+                <span v-if="this.$store.state.newsItem.activeItem.author !== ''">{{this.$store.state.newsItem.activeItem.author}}</span>
+                <span v-else>{{this.$store.state.newsItem.activeItem.ownerId}}</span>
+                {{this.$store.state.newsItem.activeItem.date}}
+            </div>
+            <div class="news-detail__info">
+                Теги - <span v-for="(item, index) in this.$store.state.newsItem.activeItem.tags" :key="index">{{item}} </span>
             </div>
         </div>
         <div class="news-detail__empty" v-else>
@@ -25,9 +30,6 @@ export default {
     activeFavorites() {
       this.$store.commit('setActiveFavorites');
     },
-  },
-  mounted() {
-    console.log('kek');
   },
 };
 </script>
@@ -57,6 +59,10 @@ export default {
             text-align: center;
             width: 100%;
             margin-bottom: 40px;
+
+            img {
+                max-width: 100%;
+            }
         }
 
         &__title {
