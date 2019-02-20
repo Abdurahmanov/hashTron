@@ -10,29 +10,19 @@ const state = {
 };
 
 const actions = {
-  getSearch({ dispatch, commit }, { slug }) { // eslint-disable-line
-    // const url = `https://api.vk.com/method/newsfeed.search?q='%23${slug}'&access_token=a74abc42dce52ec3e599c0a713c4cdf670a492f380e3fe04431334dc3eb254c1c4592fbddaaa0ffbbd542&v=5.92&extended=1&fields='name'`;
-    // axios({
-    //   url,
-    //   adapter: jsonp,
-    // }).then((response) => {
-    //   commit('setSearch', { result: response.data.response.items });
-    // });
-
+  getSearch({ commit }, { slug }) { // eslint-disable-line
     axios.post('http://localhost:3000/news', {
       tag: slug,
     })
       .then((response) => {
-        dispatch('test').then(() => {
-          console.log(response);
-        });
+        console.log(response);
       })
       .catch((error) => {
         console.log(error);
       });
   },
 
-  test({ commit }) {
+  getWs({ commit }) {
     const socket = io.connect('http://localhost:3000');
     socket.on('news', (data) => {
       if (data !== '') {

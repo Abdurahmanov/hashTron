@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const state = {
   activeItem: '',
   activeItemId: '',
@@ -6,6 +8,17 @@ const state = {
 const actions = {
   getItem({ commit }, { item }) {
     commit('setItem', { item });
+  },
+  getActiveItem({ commit }) {
+    axios.post('http://localhost:3000/favorites', {
+      tag: 'kek',
+    })
+      .then(() => {
+        commit('setActiveFavorites');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 };
 

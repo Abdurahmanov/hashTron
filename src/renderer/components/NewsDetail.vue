@@ -28,7 +28,7 @@
 export default {
   methods: {
     activeFavorites() {
-      this.$store.commit('setActiveFavorites');
+      this.$store.dispatch('getActiveItem');
     },
   },
 };

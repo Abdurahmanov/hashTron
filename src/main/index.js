@@ -1,12 +1,15 @@
 import { app, BrowserWindow } from 'electron' // eslint-disable-line
-import vkflow from 'vkflow';
+// import vkflow from 'vkflow';
 import express from 'express';
 import bodyParse from 'body-parser';
+import sqlite3 from 'sqlite3';
 const expressServer = express();
 const server = require('http').createServer(expressServer);
 const io = require('socket.io')(server);
-// const { VKWebSocket } = vkflow;
-// const { authWithToken, flushRules, postRule } = vkflow.VKStreamingAPI;
+
+const { VKWebSocket } = require('vkflow');
+const { authWithToken, flushRules, postRule } = require('vkflow').VKStreamingAPI;
+
 
 expressServer.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -19,71 +22,85 @@ expressServer.use(bodyParse.json());
 
 server.listen(3000);
 
-let flowTag = '';
+let rules = [
+  { value: 'dog', tag: 'dog' },
+  { value: 'cat', tag: 'cat' },
+  { value: 'love', tag: 'love' },
+  { value: 'лч', tag: 'лч' },
+];
+
+let newData = '';
 
 const VK_SERVICE_KEY = 'd6b72f18d6b72f18d6b72f1862d6df0310dd6b7d6b72f188ae535400a0ddc1f3581ad6a';
+let newsFlow;
+let point;
+let keys;
+(async () => {
+  const { endpoint, key } = await authWithToken(VK_SERVICE_KEY);
+  point = endpoint;
+  keys = key;
 
-// const vkWS = async (tag) => {
-//   const { endpoint, key } = await authWithToken(VK_SERVICE_KEY);
+  await flushRules(point, keys);
 
-//   await flushRules(endpoint, key);
+  for (const rule of rules) { // eslint-disable-line
+    await postRule(point, keys, { rule }); // eslint-disable-line
+  }
 
-//   await postRule(endpoint, key, { tag });
+  newsFlow = new VKWebSocket(`wss://${endpoint}/stream?key=${key}`);
+})();
 
+const vkWs = async () => {
+  await flushRules(point, keys);
 
-//   const socketWs = new VKWebSocket(
-//     `wss://${endpoint}/stream?key=${key}`,
-//     { socket: { omitServiceMessages: false } },
+  for (const rule of rules) { // eslint-disable-line
+    await postRule(point, keys, { rule }); // eslint-disable-line
+  }
+};
+
+newsFlow.on('data', (data) => {
+  newData = JSON.parse(data);
+});
+
+// const vkWs = (tag) => {
+//   const newsFlow = vkflow(
+//     VK_SERVICE_KEY,
+//     tag,
 //   );
 
-//   let newData = '';
-
-//   socketWs.on('data', (data) => {
-//     console.log(data);
+//   newsFlow.on('data', (data) => {
 //     newData = JSON.parse(data);
-//   });
-
-//   io.on('connection', (socket) => {
-//     const news = setInterval(() => {
-//       socket.emit('news', newData);
-//     }, 5000);
-
-//     socket.on('disconnect', () => {
-//       clearInterval(news);
-//     });
 //   });
 // };
 
-const vkWs = (tag) => {
-  const newsFlow = vkflow(
-    VK_SERVICE_KEY,
-    [{ value: 'js', tag: 'js' },
-      { value: 'css', tag: 'css' }, tag],
-  );
+io.on('connection', (socket) => {
+  const news = setInterval(() => {
+    socket.emit('news', newData);
+  }, 5000);
 
-  let newData = '';
-
-  newsFlow.on('data', (data) => {
-    newData = JSON.parse(data);
+  socket.on('disconnect', () => {
+    clearInterval(news);
   });
-
-  io.on('connection', (socket) => {
-    const news = setInterval(() => {
-      socket.emit('news', newData);
-    }, 5000);
-
-    socket.on('disconnect', () => {
-      clearInterval(news);
-    });
-  });
-};
-
-expressServer.post('/news', (req, res) => {
-  flowTag = { value: req.body.tag, tag: req.body.tag };
-  vkWs(flowTag);
-  res.send('ok');
 });
 
+expressServer.post('/news', (req, res) => {
+  rules = rules.concat({ value: req.body.tag, tag: req.body.tag });
+  vkWs();
+  res.send(rules);
+});
+
+expressServer.post('/favorites', (req, res) => {
+  const db = new sqlite3.Database('./hashTron.db');
+  const { tag } = req.body;
+  db.run('Insert into FavoritesTags(tag) values(?)', [tag], (err) => {
+    if (err) {
+      res.send(err.message);
+    }
+
+    res.send('kek-pek');
+  });
+
+  db.close();
+});
 
 /**
  * Set `__static` path to static files in production

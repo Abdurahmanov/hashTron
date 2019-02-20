@@ -23,6 +23,9 @@
       NewsList,
       NewsDetail,
     },
+    mounted() {
+      this.$store.dispatch('getWs');
+    },
   };
 </script>
 
