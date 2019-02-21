@@ -1,6 +1,6 @@
 <template>
   <div class="news-list">
-    <NewsItem v-for="(item) in this.$store.state.vk.searchResult" :news="item" :key="item.ownerId" />
+    <NewsItem v-for="(item) in items" :news="item" :key="item.ownerId" />
   </div>
 </template>
 
@@ -10,6 +10,7 @@
     components: {
       NewsItem,
     },
+    props: ['items'],
   };
 </script>
 

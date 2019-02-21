@@ -11,6 +11,11 @@ export default new Router({
       component: require('@/components/Main').default,
     },
     {
+      path: '/favorites',
+      name: 'favorites',
+      component: require('@/components/Favorites').default,
+    },
+    {
       path: '*',
       redirect: '/',
     },

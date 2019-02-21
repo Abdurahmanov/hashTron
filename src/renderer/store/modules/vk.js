@@ -1,5 +1,4 @@
 import axios from 'axios';
-// import jsonp from 'axios-jsonp';
 import _ from 'lodash';
 import moment from 'moment';
 import io from 'socket.io-client';
@@ -7,7 +6,7 @@ import io from 'socket.io-client';
 const state = {
   searchResult: [],
   lastResult: {},
-  category: [],
+  favorites: [],
 };
 
 const actions = {
@@ -23,32 +22,19 @@ const actions = {
       });
   },
 
-  addCategory({ commit, dispatch }, { slug }) { // eslint-disable-line
-    axios.post('http://localhost:3000/category', {
-      tag: slug,
-    })
-      .then((res) => {
-        console.log(res);
-        dispatch('getCategory');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },
-
-  getCategory({ commit }) { // eslint-disable-line
-    axios.get('http://localhost:3000/getCategory').then((res) => {
-      console.log(res);
-      commit('setCategory', { result: res.data });
-    });
-  },
-
   getWs({ commit }) {
     const socket = io.connect('http://localhost:3000');
     socket.on('news', (data) => {
       if (data !== '') {
         commit('setSearch', { result: data.event });
       }
+    });
+  },
+
+  getFavorites({ commit }) { // eslint-disable-line
+    axios.get('http://localhost:3000/getFavorites').then((res) => {
+      console.log(res);
+      commit('setFavorites', { result: res.data });
     });
   },
 };
@@ -76,8 +62,22 @@ const mutations = {
     }
     state.lastResult = formatObj;
   },
-  setCategory(state, { result }) {
-    state.category = result;
+
+  setFavorites(state, { result }) {
+    console.log(result);
+    const formatObj = result.map(item => ({
+      id: _.get(item, 'id'),
+      text: _.get(item, 'text', ''),
+      date: _.get(item, 'date', ''),
+      ownerId: _.get(item, 'ownerId'),
+      photo: _.get(item, 'imagePath', ''),
+      preview: _.get(item, 'preview', ''),
+      author: _.get(item, 'source', ''),
+      tags: _.get(item, 'IdTag'),
+      socialNetwork: _.get(item, 'socialNetwork'),
+      like: true,
+    }));
+    state.favorites = formatObj.reverse();
   },
 };
 

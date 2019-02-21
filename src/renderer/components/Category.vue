@@ -1,8 +1,8 @@
 <template>
-    <div class="sidebar__block" v-show="this.$store.state.vk.category.length > 0">
+    <div class="sidebar__block" v-show="this.$store.state.category.category.length > 0">
        <div class="sidebar__title">Category</div>
         <div class="sidebar__list">
-            <div class="sidebar__item" v-for="item in this.$store.state.vk.category" :key="item.id">{{item.title}}</div>
+            <div class="sidebar__item" v-for="item in this.$store.state.category.category" :key="item.id" @click="deleteCategory(item.id)">{{item.title}}</div>
         </div>
     </div>
 </template>
@@ -12,6 +12,13 @@
   export default {
     mounted() {
       this.$store.dispatch('getCategory');
+    },
+    methods: {
+      deleteCategory(id) {
+        this.$store.dispatch('deleteCategory', {
+          id,
+        });
+      },
     },
   };
 </script>

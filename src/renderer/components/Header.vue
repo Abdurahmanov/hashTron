@@ -1,6 +1,8 @@
 <template>
   <header class="header">
-    <div class="logo">#TRON</div>
+    <router-link to="/"  class="logo">
+      #TRON
+    </router-link>
     <div class="header__search">
       <input type="text" placeholder="#js" v-model="searchStr" @keyup.enter="search()">
     </div>
@@ -15,6 +17,9 @@
       return {
         searchStr: '',
       };
+    },
+    mounted() {
+      this.$store.dispatch('getWs');
     },
     methods: {
       search() {
@@ -51,6 +56,7 @@
 
   .logo {
     font-size: 38px;
+    color: inherit;
   }
 
   .header__search {

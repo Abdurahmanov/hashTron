@@ -38,11 +38,8 @@ const VK_SERVICE_KEY = 'd6b72f18d6b72f18d6b72f1862d6df0310dd6b7d6b72f188ae535400
 // let newsFlow;
 let point;
 let keys;
-(async () => {
-  const { endpoint, key } = await authWithToken(VK_SERVICE_KEY);
-  point = endpoint;
-  keys = key;
 
+const getCategory = () => {
   const db = new sqlite3.Database(dbPath);
 
   const sql = 'select title from Category';
@@ -59,6 +56,14 @@ let keys;
   });
 
   db.close();
+};
+
+(async () => {
+  const { endpoint, key } = await authWithToken(VK_SERVICE_KEY);
+  point = endpoint;
+  keys = key;
+
+  getCategory();
 
   await flushRules(point, keys);
 
@@ -100,7 +105,7 @@ expressServer.post('/news', (req, res) => {
 expressServer.post('/favorites', (req, res) => { // eslint-disable-line
   const { item } = req.body;
   const db = new sqlite3.Database(dbPath);
-  const sql = `Insert into Favorites(idTag,text,date,ownerId,imagePath,preview,idAuthor,source,socialNetwork) 
+  const sql = `Insert into Favorites(id,idTag,text,date,ownerId,imagePath,preview,idAuthor,source,socialNetwork) 
   values(?,?,?,?,?,?,?,?,?)`;
   const params = [1, item.text, item.date, item.ownerId, item.photo, item.preview, 1, item.author,
     item.socialNetwork];
@@ -117,7 +122,7 @@ expressServer.post('/favorites', (req, res) => { // eslint-disable-line
 expressServer.get('/getFavorites', (req, res) => {
   const db = new sqlite3.Database(dbPath);
 
-  const sql = 'select idTag,text,date,ownerId,imagePath,preview,idAuthor,source,socialNetwork from Favorites';
+  const sql = 'select id,idTag,text,date,ownerId,imagePath,preview,idAuthor,source,socialNetwork from Favorites';
 
   db.all(sql, [], (err, rows) => {
     if (err) {
@@ -164,6 +169,25 @@ expressServer.get('/getCategory', (req, res) => {
   });
 
   db.close();
+});
+
+expressServer.post('/deleteCategory', (req, res) => {
+  const { id } = req.body;
+  const db = new sqlite3.Database(dbPath);
+
+  const sql = `delete from Category where id = ${id}`;
+
+  db.all(sql, [], (err) => {
+    if (err) {
+      return res.send(err.message);
+    }
+
+    return res.send(`delete row where = ${id}`);
+  });
+
+  db.close();
+  getCategory();
+  vkWs();
 });
 
 /**

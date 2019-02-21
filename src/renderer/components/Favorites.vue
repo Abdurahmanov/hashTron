@@ -2,16 +2,13 @@
     <div class="main">
         <Sidebar />
         <div class="main__block" 
-            v-if="this.$store.state.vk.searchResult.length > 0"
+            v-if="this.$store.state.vk.favorites.length > 0"
         >
-            <NewsList :items="this.$store.state.vk.searchResult"/>
+            <NewsList :items="this.$store.state.vk.favorites"/>
             <NewsDetail></NewsDetail>
         </div>
-        <div class="main__empty" v-else-if="this.$store.state.category.category.length > 0">
-            Подождите немного, интересующие Вас новости скоро появяться
-        </div>
-        <div class="main__empty" v-else-if="this.$store.state.category.category.length === 0">
-            Введите в поисковую строку интересующий Вас hashtag
+        <div class="main__empty" v-else>
+            Добавьте в избранное интересующую вас новость
         </div>
     </div>
 </template>
@@ -25,6 +22,9 @@
       Sidebar,
       NewsList,
       NewsDetail,
+    },
+    mounted() {
+      this.$store.dispatch('getFavorites');
     },
   };
 </script>

@@ -1,7 +1,9 @@
 <template>
   <div class="sidebar">
       <div class="sidebar__favorites">
-          Favorites
+        <router-link to="/favorites"  class="favorites" active-class="favorites_active">
+            Favorites
+        </router-link>
       </div>
       <Category />
       <Filters />
@@ -68,6 +70,14 @@
           &:last-child {
               margin-bottom: 0;
           }
+      }
+  }
+
+  .favorites {
+      color: #000;
+
+      &_active {
+          color: blue;
       }
   }
 </style>
