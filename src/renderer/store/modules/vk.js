@@ -64,6 +64,7 @@ const mutations = {
       preview: _.get(result, 'attachments[0].photo.photo_130', ''),
       author: _.get(result, 'author.author_url', ''),
       tags: _.get(result, 'tags'),
+      socialNetwork: 'vk',
     };
     const newsLength = state.searchResult.length;
     if (newsLength === 0) {

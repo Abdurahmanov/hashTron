@@ -8,12 +8,12 @@ const expressServer = express();
 const server = require('http').createServer(expressServer);
 const io = require('socket.io')(server);
 const dbPath = path.resolve(__dirname, 'hashTron.db');
-const knex = require('knex')({
-  client: 'sqlite3',
-  connection: {
-    filename: dbPath,
-  },
-});
+// const knex = require('knex')({
+//   client: 'sqlite3',
+//   connection: {
+//     filename: dbPath,
+//   },
+// });
 
 const { VKWebSocket } = require('vkflow');
 const { authWithToken, flushRules, postRule } = require('vkflow').VKStreamingAPI;
@@ -30,12 +30,7 @@ expressServer.use(bodyParse.json());
 
 server.listen(3000);
 
-let rules = [
-  { value: 'dog', tag: 'dog' },
-  { value: 'cat', tag: 'cat' },
-  { value: 'love', tag: 'love' },
-  { value: 'лч', tag: 'лч' },
-];
+let rules = [];
 
 let newData = '';
 
@@ -47,6 +42,23 @@ let keys;
   const { endpoint, key } = await authWithToken(VK_SERVICE_KEY);
   point = endpoint;
   keys = key;
+
+  const db = new sqlite3.Database(dbPath);
+
+  const sql = 'select title from Category';
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      return console.log(err.message);
+    }
+    rows.forEach((row) => {
+      rules = rules.concat({ value: row.title, tag: row.title });
+    });
+
+    return console.log(rules);
+  });
+
+  db.close();
 
   await flushRules(point, keys);
 
@@ -86,18 +98,43 @@ expressServer.post('/news', (req, res) => {
 });
 
 expressServer.post('/favorites', (req, res) => { // eslint-disable-line
-  // const { tag } = req.body;
-  const result = knex.select('text').from('posts');
-  result.then(rows => res.send(rows));
+  const { item } = req.body;
+  const db = new sqlite3.Database(dbPath);
+  const sql = `Insert into Favorites(idTag,text,date,ownerId,imagePath,preview,idAuthor,source,socialNetwork) 
+  values(?,?,?,?,?,?,?,?,?)`;
+  const params = [1, item.text, item.date, item.ownerId, item.photo, item.preview, 1, item.author,
+    item.socialNetwork];
+  db.run(sql, params, (err) => {
+    if (err) {
+      return res.send(err.message);
+    }
+    return res.send(item);
+  });
+
+  db.close();
+});
+
+expressServer.get('/getFavorites', (req, res) => {
+  const db = new sqlite3.Database(dbPath);
+
+  const sql = 'select idTag,text,date,ownerId,imagePath,preview,idAuthor,source,socialNetwork from Favorites';
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      return res.send(err.message);
+    }
+    let favorites = [];
+    rows.forEach((row) => {
+      favorites = favorites.concat(row);
+    });
+    return res.send(favorites);
+  });
+
+  db.close();
 });
 
 expressServer.post('/category', (req, res) => { // eslint-disable-line
   const { tag } = req.body;
-  // const result = knex.select('title').from('Category');
-  // result.then(rows => console.log(rows));
-
-  // return res.send(tag);
-
   const db = new sqlite3.Database(dbPath);
   db.run('Insert into Category(title) values(?)', [tag], (err) => {
     if (err) {
@@ -113,14 +150,13 @@ expressServer.post('/category', (req, res) => { // eslint-disable-line
 expressServer.get('/getCategory', (req, res) => {
   const db = new sqlite3.Database(dbPath);
 
-  const sql = 'select title from Category';
+  const sql = 'select title, id from Category';
 
   db.all(sql, [], (err, rows) => {
     if (err) {
       return res.send(err.message);
     }
     let category = [];
-    console.log(rows);
     rows.forEach((row) => {
       category = category.concat({ id: row.id, title: row.title });
     });

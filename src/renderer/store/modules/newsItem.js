@@ -9,9 +9,9 @@ const actions = {
   getItem({ commit }, { item }) {
     commit('setItem', { item });
   },
-  getActiveItem({ commit }) {
+  getActiveItem({ state, commit }) {
     axios.post('http://localhost:3000/favorites', {
-      tag: 'kek',
+      item: state.activeItem,
     })
       .then(() => {
         commit('setActiveFavorites');
