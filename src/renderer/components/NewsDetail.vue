@@ -28,7 +28,13 @@
 export default {
   methods: {
     activeFavorites() {
-      this.$store.dispatch('getActiveItem');
+      if (this.$store.state.newsItem.activeItem.favorites) {
+        this.$store.dispatch('deleteFavorites', {
+          id: this.$store.state.newsItem.activeItem.id,
+        });
+      } else {
+        this.$store.dispatch('addFavorites');
+      }
     },
   },
 };

@@ -105,7 +105,7 @@ expressServer.post('/news', (req, res) => {
 expressServer.post('/favorites', (req, res) => { // eslint-disable-line
   const { item } = req.body;
   const db = new sqlite3.Database(dbPath);
-  const sql = `Insert into Favorites(id,idTag,text,date,ownerId,imagePath,preview,idAuthor,source,socialNetwork) 
+  const sql = `Insert into Favorites(idTag,text,date,ownerId,imagePath,preview,idAuthor,source,socialNetwork) 
   values(?,?,?,?,?,?,?,?,?)`;
   const params = [1, item.text, item.date, item.ownerId, item.photo, item.preview, 1, item.author,
     item.socialNetwork];
@@ -133,6 +133,23 @@ expressServer.get('/getFavorites', (req, res) => {
       favorites = favorites.concat(row);
     });
     return res.send(favorites);
+  });
+
+  db.close();
+});
+
+expressServer.post('/deleteFavorites', (req, res) => {
+  const { id } = req.body;
+  const db = new sqlite3.Database(dbPath);
+
+  const sql = `delete from Favorites where id = ${id}`;
+
+  db.all(sql, [], (err) => {
+    if (err) {
+      return res.send(err.message);
+    }
+
+    return res.send(`delete row where = ${id}`);
   });
 
   db.close();

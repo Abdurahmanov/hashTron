@@ -6,7 +6,6 @@ import io from 'socket.io-client';
 const state = {
   searchResult: [],
   lastResult: {},
-  favorites: [],
 };
 
 const actions = {
@@ -28,13 +27,6 @@ const actions = {
       if (data !== '') {
         commit('setSearch', { result: data.event });
       }
-    });
-  },
-
-  getFavorites({ commit }) { // eslint-disable-line
-    axios.get('http://localhost:3000/getFavorites').then((res) => {
-      console.log(res);
-      commit('setFavorites', { result: res.data });
     });
   },
 };
@@ -61,23 +53,6 @@ const mutations = {
       state.searchResult = newResult;
     }
     state.lastResult = formatObj;
-  },
-
-  setFavorites(state, { result }) {
-    console.log(result);
-    const formatObj = result.map(item => ({
-      id: _.get(item, 'id'),
-      text: _.get(item, 'text', ''),
-      date: _.get(item, 'date', ''),
-      ownerId: _.get(item, 'ownerId'),
-      photo: _.get(item, 'imagePath', ''),
-      preview: _.get(item, 'preview', ''),
-      author: _.get(item, 'source', ''),
-      tags: _.get(item, 'IdTag'),
-      socialNetwork: _.get(item, 'socialNetwork'),
-      like: true,
-    }));
-    state.favorites = formatObj.reverse();
   },
 };
 

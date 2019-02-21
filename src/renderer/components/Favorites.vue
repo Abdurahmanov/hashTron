@@ -2,9 +2,9 @@
     <div class="main">
         <Sidebar />
         <div class="main__block" 
-            v-if="this.$store.state.vk.favorites.length > 0"
+            v-if="this.$store.state.newsItem.favorites.length > 0"
         >
-            <NewsList :items="this.$store.state.vk.favorites"/>
+            <NewsList :items="this.$store.state.newsItem.favorites"/>
             <NewsDetail></NewsDetail>
         </div>
         <div class="main__empty" v-else>
