@@ -20,7 +20,6 @@ const actions = {
 
   getCategory({ commit }) { // eslint-disable-line
     axios.get('http://localhost:3000/getCategory').then((res) => {
-      console.log(res);
       commit('setCategory', { result: res.data });
     });
   },
@@ -29,8 +28,7 @@ const actions = {
     axios.post('http://localhost:3000/deleteCategory', {
       id,
     })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         dispatch('getCategory');
       })
       .catch((error) => {

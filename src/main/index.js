@@ -1,5 +1,4 @@
 import { app, BrowserWindow } from 'electron' // eslint-disable-line
-// import vkflow from 'vkflow';
 import express from 'express';
 import bodyParse from 'body-parser';
 const sqlite3 = require('sqlite3').verbose();
@@ -8,12 +7,6 @@ const expressServer = express();
 const server = require('http').createServer(expressServer);
 const io = require('socket.io')(server);
 const dbPath = path.resolve(__dirname, 'hashTron.db');
-// const knex = require('knex')({
-//   client: 'sqlite3',
-//   connection: {
-//     filename: dbPath,
-//   },
-// });
 
 const { VKWebSocket } = require('vkflow');
 const { authWithToken, flushRules, postRule } = require('vkflow').VKStreamingAPI;

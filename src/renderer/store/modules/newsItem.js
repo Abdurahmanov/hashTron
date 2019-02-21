@@ -27,8 +27,7 @@ const actions = {
     axios.post('http://localhost:3000/deleteFavorites', {
       id,
     })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         dispatch('getFavorites');
         commit('destroyItem');
       })
@@ -39,7 +38,6 @@ const actions = {
 
   getFavorites({ commit }) { // eslint-disable-line
     axios.get('http://localhost:3000/getFavorites').then((res) => {
-      console.log(res);
       commit('setFavorites', { result: res.data });
     });
   },
