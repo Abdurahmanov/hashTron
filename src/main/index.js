@@ -2,10 +2,18 @@ import { app, BrowserWindow } from 'electron' // eslint-disable-line
 // import vkflow from 'vkflow';
 import express from 'express';
 import bodyParse from 'body-parser';
-import sqlite3 from 'sqlite3';
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 const expressServer = express();
 const server = require('http').createServer(expressServer);
 const io = require('socket.io')(server);
+const dbPath = path.resolve(__dirname, 'hashTron.db');
+const knex = require('knex')({
+  client: 'sqlite3',
+  connection: {
+    filename: dbPath,
+  },
+});
 
 const { VKWebSocket } = require('vkflow');
 const { authWithToken, flushRules, postRule } = require('vkflow').VKStreamingAPI;
@@ -32,7 +40,7 @@ let rules = [
 let newData = '';
 
 const VK_SERVICE_KEY = 'd6b72f18d6b72f18d6b72f1862d6df0310dd6b7d6b72f188ae535400a0ddc1f3581ad6a';
-let newsFlow;
+// let newsFlow;
 let point;
 let keys;
 (async () => {
@@ -46,7 +54,11 @@ let keys;
     await postRule(point, keys, { rule }); // eslint-disable-line
   }
 
-  newsFlow = new VKWebSocket(`wss://${endpoint}/stream?key=${key}`);
+  const newsFlow = new VKWebSocket(`wss://${endpoint}/stream?key=${key}`);
+
+  newsFlow.on('data', (data) => {
+    newData = JSON.parse(data);
+  });
 })();
 
 const vkWs = async () => {
@@ -56,21 +68,6 @@ const vkWs = async () => {
     await postRule(point, keys, { rule }); // eslint-disable-line
   }
 };
-
-newsFlow.on('data', (data) => {
-  newData = JSON.parse(data);
-});
-
-// const vkWs = (tag) => {
-//   const newsFlow = vkflow(
-//     VK_SERVICE_KEY,
-//     tag,
-//   );
-
-//   newsFlow.on('data', (data) => {
-//     newData = JSON.parse(data);
-//   });
-// };
 
 io.on('connection', (socket) => {
   const news = setInterval(() => {
@@ -85,18 +82,49 @@ io.on('connection', (socket) => {
 expressServer.post('/news', (req, res) => {
   rules = rules.concat({ value: req.body.tag, tag: req.body.tag });
   vkWs();
-  res.send(rules);
+  return res.send(rules);
 });
 
-expressServer.post('/favorites', (req, res) => {
-  const db = new sqlite3.Database('./hashTron.db');
+expressServer.post('/favorites', (req, res) => { // eslint-disable-line
+  // const { tag } = req.body;
+  const result = knex.select('text').from('posts');
+  result.then(rows => res.send(rows));
+});
+
+expressServer.post('/category', (req, res) => { // eslint-disable-line
   const { tag } = req.body;
-  db.run('Insert into FavoritesTags(tag) values(?)', [tag], (err) => {
+  // const result = knex.select('title').from('Category');
+  // result.then(rows => console.log(rows));
+
+  // return res.send(tag);
+
+  const db = new sqlite3.Database(dbPath);
+  db.run('Insert into Category(title) values(?)', [tag], (err) => {
     if (err) {
-      res.send(err.message);
+      return res.send(err.message);
     }
 
-    res.send('kek-pek');
+    return res.send(tag);
+  });
+
+  db.close();
+});
+
+expressServer.get('/getCategory', (req, res) => {
+  const db = new sqlite3.Database(dbPath);
+
+  const sql = 'select title from Category';
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      return res.send(err.message);
+    }
+    let category = [];
+    console.log(rows);
+    rows.forEach((row) => {
+      category = category.concat({ id: row.id, title: row.title });
+    });
+    return res.send(category);
   });
 
   db.close();

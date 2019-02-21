@@ -4,7 +4,7 @@
     <div class="header__search">
       <input type="text" placeholder="#js" v-model="searchStr" @keyup.enter="search()">
     </div>
-    <button class="header__button">+</button>
+    <button class="header__button" @click="addCategory" >+</button>
   </header>
 </template>
 
@@ -21,6 +21,15 @@
         const self = this;
         if (self.searchStr !== '') {
           this.$store.dispatch('getSearch', {
+            slug: self.searchStr,
+          });
+          // self.searchStr = '';
+        }
+      },
+      addCategory() {
+        const self = this;
+        if (self.searchStr !== '') {
+          this.$store.dispatch('addCategory', {
             slug: self.searchStr,
           });
         }

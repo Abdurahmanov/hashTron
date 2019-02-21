@@ -7,6 +7,7 @@ import io from 'socket.io-client';
 const state = {
   searchResult: [],
   lastResult: {},
+  category: [],
 };
 
 const actions = {
@@ -20,6 +21,26 @@ const actions = {
       .catch((error) => {
         console.log(error);
       });
+  },
+
+  addCategory({ commit, dispatch }, { slug }) { // eslint-disable-line
+    axios.post('http://localhost:3000/category', {
+      tag: slug,
+    })
+      .then((res) => {
+        console.log(res);
+        dispatch('getCategory');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+
+  getCategory({ commit }) { // eslint-disable-line
+    axios.get('http://localhost:3000/getCategory').then((res) => {
+      console.log(res);
+      commit('setCategory', { result: res.data });
+    });
   },
 
   getWs({ commit }) {
@@ -53,6 +74,9 @@ const mutations = {
       state.searchResult = newResult;
     }
     state.lastResult = formatObj;
+  },
+  setCategory(state, { result }) {
+    state.category = result;
   },
 };
 
